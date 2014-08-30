@@ -1,0 +1,14 @@
+<?php
+
+// Configurations-Datei für die Messwert Speicherung und ausgabe
+
+
+// Datenbank-Konfiguration
+$CONF_DB_host = "localhost";
+$CONF_DB_user = "";
+$CONF_DB_pass = "";
+$CONF_DB_db   = "Sensoren";
+
+$DEBUG = false;
+
+?>
