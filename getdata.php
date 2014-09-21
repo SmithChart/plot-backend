@@ -1,19 +1,5 @@
 <?php
 
-/*
-Gibt die Daten ein, oder mehrerer Messstellen als CSV-Datei aus.
-
-Format der Datei:
-Timestamp,val1,val2, ...\n
-
-Jede Zeile enthaelt an nur einer valN einen Wert. Liegen mehrere Werte fuer einen Timestamp vor, so werden mehrere Zeilen erzeugt.
-
-Aufruf:
-getdata.php?id[]=<id1>&id[]=<id2> ... &time=N
-
-time gibt die Zeit in Stunden an, fuer die Daten ausgegeben werden sollen.
-*/
-
 require_once("config.inc.php");
 
 //$DEBUG = 1;
