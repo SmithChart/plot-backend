@@ -28,6 +28,19 @@ if(!is_array($_GET['id'])) {
 
 if($DEBUG) echo "Läe des Messstellen-ID-Arrays: ".sizeof($ids)."<br>";
 
+
+//Preprocess Polish
+$pHold = FALSE;
+$pNotNull = FALSE;
+if(isset($_GET['polish']) && is_array($_GET['polish'])) {
+	if(in_array('hold', $_GET['polish'])) {
+		$pHold = TRUE;
+	}
+	if(in_array('notnull', $_GET['polish'])) {
+		$pNotNull = TRUE;
+	}
+}
+
 $searchstring = "";
 for($i = 0; $i < (sizeof($ids)-1); $i++) {
 	$searchstring = $searchstring."Messstelle = ".$ids[$i]." OR ";
@@ -90,8 +103,17 @@ $stelle = $stellendaten[$i];
 echo htmlentities("".$stelle[2]." [".$stelle[3]."]");
 echo "\n";
 
+$pHoldV = $larr;
+
 while($row = mysql_fetch_row($result)) {
 	// Füe Datenzeile:
+	
+	//polish:notNull
+	if($pNotNull) {
+		if($row[1] == 0) {
+			continue;
+		}
+	}
 	
 	// Neue Zeile vorbereiten
 	$narr = $larr;
@@ -108,6 +130,28 @@ while($row = mysql_fetch_row($result)) {
 	}
 	//Messwert an die richtige Stelle schreiben:
 	$narr[$pos+1] = $row[1];
+
+	//polish:hold
+	if($pHold) {
+		if($pHoldV[$pos+1] != $row[1]) {
+			if($pHoldV[$pos+1] != NULL) {
+				//echo $pHoldV[$pos+1]."\n";
+				$marr = $larr;
+				$marr[0] = date("Y/m/d H:i:s", $row[2]);
+				$marr[$pos+1] = $pHoldV[$pos+1];
+
+				for($i=0; $i<(sizeof($marr)-1); $i++) {
+					echo $marr[$i].",";
+				}
+				echo $marr[$i];
+				echo "\n";
+				//echo ",p".$row[1].",";
+			}
+
+			$pHoldV[$pos+1] = $row[1];
+			//echo $pHoldV[$pos+1]."\n";
+		}
+	}
 	
 	for($i=0; $i<(sizeof($narr)-1); $i++) {
 		echo $narr[$i].",";
